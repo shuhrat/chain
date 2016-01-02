@@ -1,0 +1,14 @@
+{
+  "name": "chain",
+  "version": "0.0.1",
+  "homepage": "https://github.com/shuhrat/chain",
+  "author": "Shuhrat Shadmonkulov <shadmonkulov@gmail.com>",
+  "description": "Web calendar for productivity method known as Don't break the chain",
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/shuhrat/chain.git"
+  },
+  "bugs": {
+    "url": "https://github.com/shuhrat/chain/issues"
+  }
+}
