@@ -1,0 +1,78 @@
+<!DOCTYPE html>
+<html xmlns="http://www.w3.org/1999/html">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+    <link rel="shortcut icon" type="image/png" href="src/images/chain.png"/>
+
+    <link rel="stylesheet" href="src/styles/material.css"/>
+    <link rel="stylesheet" href="https://fonts.googleapis.com/icon?family=Material+Icons">
+
+    <link rel="stylesheet" href="src/styles/cal-heatmap.css"/>
+
+    <link rel="stylesheet" href="src/styles/custom.css"/>
+
+
+    <script src="src/scripts/zepto.min.js"></script>
+    <script src="src/scripts/material.js"></script>
+    <script src="src/scripts/d3.min.js"></script>
+    <script src="src/scripts/cal-heatmap.js"></script>
+    <script src="src/scripts/localforage.js"></script>
+    <script src="src/scripts/angular.js"></script>
+
+    <script src="src/scripts/custom.js"></script>
+
+    <title>Don't break the chain</title>
+</head>
+<body>
+    <div class="mdl-layout mdl-js-layout mdl-layout--fixed-drawer">
+        <div class="mdl-layout__drawer">
+            <span class="mdl-layout-title">
+                Daily activities
+                <button class="mdl-button mdl-js-button mdl-button--fab mdl-button--mini-fab">
+                    <i class="material-icons">add</i>
+                </button>
+            </span>
+
+            <table class="mdl-data-table">
+                <tr>
+                    <td class="mdl-data-table__cell--non-numeric">
+                        <label class="mdl-checkbox mdl-js-checkbox mdl-js-ripple-effect" for="checkbox-2">
+                            <input type="checkbox" id="checkbox-2" class="mdl-checkbox__input">
+                            <span class="mdl-checkbox__label">Checkbox</span>
+                        </label>
+                    </td>
+                </tr>
+                <tr>
+                    <td class="mdl-data-table__cell--non-numeric">
+                        <label class="mdl-checkbox mdl-js-checkbox mdl-js-ripple-effect" for="checkbox-3">
+                            <input type="checkbox" id="checkbox-3" class="mdl-checkbox__input">
+                            <span class="mdl-checkbox__label">Running 2 miles</span>
+                        </label>
+                    </td>
+                </tr>
+                <tr>
+                    <td class="mdl-data-table__cell--non-numeric">
+                        <label class="mdl-checkbox mdl-js-checkbox mdl-js-ripple-effect" for="checkbox-4">
+                            <input type="checkbox" id="checkbox-4" class="mdl-checkbox__input">
+                            <span class="mdl-checkbox__label">Workout 10 min</span>
+                        </label>
+
+                    </td>
+                </tr>
+            </table>
+        </div>
+
+        <main class="mdl-layout__content">
+            <div class="page-content">
+
+                <div class="chain-calendar" data-js="{'test': 'test'}"></div>
+
+            </div>
+        </main>
+    </div>
+
+
+</body>
+</html>
