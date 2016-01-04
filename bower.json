@@ -1,0 +1,11 @@
+{
+  "name": "chain",
+  "version": "0.0.1",
+  "dependencies": {
+    "angular": "latest",
+    "cal-heatmap": "latest",
+    "jquery": "latest",
+    "localforage": "latest",
+    "material-design-lite": "latest"
+  }
+}
