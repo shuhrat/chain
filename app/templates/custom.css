@@ -3,7 +3,10 @@
 }
 
 .mdl-layout-title .mdl-button {
-    margin-left: 25px;
+    top: 10px;
+    right: 0;
+    position: absolute;
+    margin-right: 10px;
 }
 
 .mdl-data-table {
