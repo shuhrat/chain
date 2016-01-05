@@ -46,7 +46,7 @@
       "predef": [
         "console",
         "chai", "sinon", "assert", "expect", "should",  "describe", "it",
-        "afterEach", "beforeEach",
+        "afterEach", "beforeEach"
       ]
     }
   }

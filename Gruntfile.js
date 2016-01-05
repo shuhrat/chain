@@ -1,21 +1,21 @@
-/*jslint node: true */
-"use strict";
+'use strict';
 
-var R = require('ramda');
+var R = require('ramda'),
 
-var jsLibs = [
-    'vendors/jquery/dist',
-    'vendors/d3',
-    'vendors/cal-heatmap',
-    'vendors/angular',
-    'vendors/localforge/dist',
-    'vendors/material-design-lite'
-];
-var allJsLibs = R.map(R.partialRight(R.concat, ['/*.min.js']));
-var allCssLibs = R.compose(
-    R.append('app/**/*.css'),
-    R.map(R.partialRight(R.concat, ['/*.css']))
-);
+    vendorLibs = [
+        'vendors/jquery/dist',
+        'vendors/d3',
+        'vendors/cal-heatmap',
+        //  'vendors/angular',
+        'vendors/localforge/dist',
+        'vendors/material-design-lite'
+    ],
+
+    jsFileList = R.map(R.partialRight(R.concat, ['/*.min.js'])),
+    cssFileList = R.compose(
+        R.append('app/**/*.css'),
+        R.map(R.partialRight(R.concat, ['/*.css']))
+    );
 
 module.exports = function(grunt) {
     grunt.initConfig({
@@ -33,12 +33,38 @@ module.exports = function(grunt) {
         bower: {
             install: {
                 options: {
-                    copy: true,
                     install: true,
-                    cleanup: !true,
                     verbose: true,
                     targetDir: './vendors'
                 }
+            }
+        },
+
+        html2js: {
+            dist: {
+                src: ['app/**/*.html'],
+                dest: 'dist/templates.js'
+            }
+        },
+
+        concat: {
+            options: {
+                separator: ';\n'
+            },
+            libs: {
+                src: jsFileList(vendorLibs),
+                dest: 'dist/libs.js'
+            },
+            styles: {
+                src: cssFileList(vendorLibs),
+                dest: 'dist/styles.css',
+                options: {
+                    separator: '\n'
+                }
+            },
+            app: {
+                src: ['app/**/*.js', 'app/*.js'],
+                dest: 'dist/app.js'
             }
         },
 
@@ -48,42 +74,8 @@ module.exports = function(grunt) {
                     mangle: false
                 },
                 files: {
-                    'dist/app.js': ['dist/libs.js', 'dist/app.js']
+                    'dist/app.min.js': ['dist/templates.js', 'dist/app.js']
                 }
-            }
-        },
-
-        html2js: {
-            dist: {
-                src: ['app/templates/*.html'],
-                dest: 'tmp/templates.js'
-            }
-        },
-
-        clean: {
-            temp: {
-                src: ['tmp']
-            }
-        },
-
-        concat: {
-            options: {
-                separator: ';\n'
-            },
-            libs: {
-                src: allJsLibs(jsLibs),
-                dest: 'dist/libs.js'
-            },
-            styles: {
-                src: allCssLibs(jsLibs),
-                dest: 'dist/styles.css',
-                options: {
-                    separator: '\n'
-                }
-            },
-            dist: {
-                src: ['app/*.js'],
-                dest: 'dist/app.js'
             }
         },
 
@@ -92,38 +84,8 @@ module.exports = function(grunt) {
                 atBegin: true
             },
             dev: {
-                files: ['Gruntfile.js', 'app/*.js', '*.html', '*.css'],
-                tasks: ['html2js:dist', 'concat', 'clean:temp']
-            },
-            min: {
-                files: ['Gruntfile.js', 'app/*.js', '*.html'],
-                tasks: ['html2js:dist', 'concat', 'clean:temp', 'uglify:dist']
-            }
-        },
-
-        compress: {
-            dist: {
-                options: {
-                    archive: 'dist/<%= pkg.name %>-<%= pkg.version %>.zip'
-                },
-                files: [
-                    {
-                        src: ['index.html'],
-                        dest: '/'
-                    },
-                    {
-                        src: ['dist/**'],
-                        dest: 'dist/'
-                    },
-                    {
-                        src: ['assets/**'],
-                        dest: 'assets/'
-                    },
-                    {
-                        src: ['libs/**'],
-                        dest: 'libs/'
-                    }
-                ]
+                files: ['Gruntfile.js', 'app/*.js', 'app/**/*.js', '*.html', '*.css'],
+                tasks: ['build']
             }
         }
     });
@@ -137,12 +99,8 @@ module.exports = function(grunt) {
     grunt.loadNpmTasks('grunt-bower-task');
     grunt.loadNpmTasks('grunt-html2js');
 
-    grunt.registerTask('build', ['bower', '']);
-
+    grunt.registerTask('build', ['bower', 'concat', 'html2js', 'uglify:dist']);
     grunt.registerTask('dev', ['build', 'connect:server', 'watch:dev']);
-    grunt.registerTask('test', ['build']);
 
-    grunt.registerTask('minified', ['bower', 'connect:server', 'watch:min']);
-    grunt.registerTask('package', ['bower', 'html2js:dist', 'concat:dist', 'uglify:dist',
-        'clean:temp', 'compress:dist']);
+    grunt.registerTask('default', ['dev']);
 };
