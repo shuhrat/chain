@@ -1,0 +1,53 @@
+{
+  "browser": true,
+  "jquery": true,
+  "node": true,
+  "mocha": true,
+
+  "debug": false,
+  "devel": false,
+
+  "eqeqeq": true,
+  "evil": true,
+  "expr": true,
+
+  "forin": true,
+  "funcscope": true,
+
+  "latedef": "nofunc",
+  "laxcomma": true,
+  "laxbreak": true,
+
+  "maxcomplexity": 10,
+  "maxdepth": 4,
+  "maxparams": 4,
+
+  "noarg": true,
+  "nonbsp": true,
+  "nonew": true,
+  "notypeof": true,
+
+  "sub": true,
+
+  "undef": true,
+  "unused": true,
+
+  "predef": [
+    "-console",
+    "$", "angular", "CalHeatMap", "localforage"
+  ],
+
+  "overrides": {
+    "test/**/*.js": {
+      "browser": false,
+      "jquery": false,
+      "node": true,
+      "mocha": true,
+      "predef": [
+        "console",
+        "chai", "sinon", "assert", "expect", "should",  "describe", "it",
+        "afterEach", "beforeEach",
+      ]
+    }
+  }
+}
