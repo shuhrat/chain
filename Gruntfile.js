@@ -1,6 +1,22 @@
 /*jslint node: true */
 "use strict";
 
+var R = require('ramda');
+
+var jsLibs = [
+    'libs/jquery/dist',
+    'libs/d3',
+    'libs/cal-heatmap',
+    'libs/angular',
+    'libs/localforge/dist',
+    'libs/material-design-lite'
+];
+
+var allJsLibs = R.map(R.partialRight(R.concat, ['/*.min.js']));
+var allCssLibs = R.compose(
+    R.append('app/**/*.css'),
+    R.map(R.partialRight(R.concat, ['/*.css']))
+);
 
 module.exports = function (grunt) {
 
@@ -20,11 +36,11 @@ module.exports = function (grunt) {
 
         uglify: {
             dist: {
-                files: {
-                    'dist/app.js': ['dist/app.js']
-                },
                 options: {
                     mangle: false
+                },
+                files: {
+                    'dist/app.js': ['dist/libs.js', 'dist/app.js']
                 }
             }
         },
@@ -44,10 +60,21 @@ module.exports = function (grunt) {
 
         concat: {
             options: {
-                separator: ';'
+                separator: ';\n'
+            },
+            libs: {
+                src: allJsLibs(jsLibs),
+                dest: 'dist/libs.js'
+            },
+            styles: {
+                src: allCssLibs(jsLibs),
+                dest: 'dist/styles.css',
+                options: {
+                    separator: '\n'
+                }
             },
             dist: {
-                src: ['app/*.js', 'tmp/*.js'],
+                src: ['app/*.js'],
                 dest: 'dist/app.js'
             }
         },
@@ -66,19 +93,16 @@ module.exports = function (grunt) {
         },
 
         watch: {
+            options: {
+                atBegin: true
+            },
             dev: {
                 files: ['Gruntfile.js', 'app/*.js', '*.html'],
-                tasks: ['jshint', 'html2js:dist', 'concat:dist', 'clean:temp'],
-                options: {
-                    atBegin: true
-                }
+                tasks: ['jshint', 'html2js:dist', 'concat', 'clean:temp']
             },
             min: {
                 files: ['Gruntfile.js', 'app/*.js', '*.html'],
-                tasks: ['jshint', 'html2js:dist', 'concat:dist', 'clean:temp', 'uglify:dist'],
-                options: {
-                    atBegin: true
-                }
+                tasks: ['jshint', 'html2js:dist', 'concat', 'clean:temp', 'uglify:dist']
             }
         },
 
@@ -87,19 +111,24 @@ module.exports = function (grunt) {
                 options: {
                     archive: 'dist/<%= pkg.name %>-<%= pkg.version %>.zip'
                 },
-                files: [{
-                    src: ['index.html'],
-                    dest: '/'
-                }, {
-                    src: ['dist/**'],
-                    dest: 'dist/'
-                }, {
-                    src: ['assets/**'],
-                    dest: 'assets/'
-                }, {
-                    src: ['libs/**'],
-                    dest: 'libs/'
-                }]
+                files: [
+                    {
+                        src: ['index.html'],
+                        dest: '/'
+                    },
+                    {
+                        src: ['dist/**'],
+                        dest: 'dist/'
+                    },
+                    {
+                        src: ['assets/**'],
+                        dest: 'assets/'
+                    },
+                    {
+                        src: ['libs/**'],
+                        dest: 'libs/'
+                    }
+                ]
             }
         }
     });
