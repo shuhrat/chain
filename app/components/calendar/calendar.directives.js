@@ -1,10 +1,5 @@
-/*jslint node: true */
-/*global angular, alert, CalHeatMap, log */
-"use strict";
 
-var calendar = angular.module('calendar', []);
-
-calendar.directive('calendar', function () {
+var calendarDirective = function() {
     return {
         restrict: 'E',
         templateUrl: 'app/templates/calendar.html',
@@ -12,9 +7,12 @@ calendar.directive('calendar', function () {
             alert('controller');
             console.log('controller');
         },
-        link: function ($scope, $element, $attributes, controller) {
+        link: function (scope, element, attributes, controller) {
             log('link');
             alert('link');
-
+        }
     };
-});
+};
+
+angular.module('calendar')
+    .directive('calendar', calendarDirective);

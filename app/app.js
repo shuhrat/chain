@@ -1,11 +1,6 @@
-/*jslint node: true */
-/*jslint nomen: true */
-/*global angular, _, CalHeatMap, $*/
-"use strict";
+'use strict';
 
-angular.module("myApp", [
-  'myApp.filters',
-  'myApp.services',
-  'calendar',
-  'myApp.controllers'
+angular.module('chainApp', [
+  'chainApp.calendar',
+  'chainApp.activities'
 ]);

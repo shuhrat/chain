@@ -4,32 +4,40 @@
 var R = require('ramda');
 
 var jsLibs = [
-    'libs/jquery/dist',
-    'libs/d3',
-    'libs/cal-heatmap',
-    'libs/angular',
-    'libs/localforge/dist',
-    'libs/material-design-lite'
+    'vendors/jquery/dist',
+    'vendors/d3',
+    'vendors/cal-heatmap',
+    'vendors/angular',
+    'vendors/localforge/dist',
+    'vendors/material-design-lite'
 ];
-
 var allJsLibs = R.map(R.partialRight(R.concat, ['/*.min.js']));
 var allCssLibs = R.compose(
     R.append('app/**/*.css'),
     R.map(R.partialRight(R.concat, ['/*.css']))
 );
 
-module.exports = function (grunt) {
-
+module.exports = function(grunt) {
     grunt.initConfig({
         pkg: grunt.file.readJSON('package.json'),
+
+        connect: {
+            server: {
+                options: {
+                    hostname: 'localhost',
+                    port: 8080
+                }
+            }
+        },
 
         bower: {
             install: {
                 options: {
+                    copy: true,
                     install: true,
-                    copy: false,
-                    targetDir: './libs',
-                    cleanTargetDir: true
+                    cleanup: !true,
+                    verbose: true,
+                    targetDir: './vendors'
                 }
             }
         },
@@ -79,30 +87,17 @@ module.exports = function (grunt) {
             }
         },
 
-        jshint: {
-            all: ['Gruntfile.js', 'app/*.js', 'app/**/*.js']
-        },
-
-        connect: {
-            server: {
-                options: {
-                    hostname: 'localhost',
-                    port: 8080
-                }
-            }
-        },
-
         watch: {
             options: {
                 atBegin: true
             },
             dev: {
                 files: ['Gruntfile.js', 'app/*.js', '*.html', '*.css'],
-                tasks: ['jshint', 'html2js:dist', 'concat', 'clean:temp']
+                tasks: ['html2js:dist', 'concat', 'clean:temp']
             },
             min: {
                 files: ['Gruntfile.js', 'app/*.js', '*.html'],
-                tasks: ['jshint', 'html2js:dist', 'concat', 'clean:temp', 'uglify:dist']
+                tasks: ['html2js:dist', 'concat', 'clean:temp', 'uglify:dist']
             }
         },
 
@@ -133,19 +128,21 @@ module.exports = function (grunt) {
         }
     });
 
-    grunt.loadNpmTasks('grunt-contrib-jshint');
     grunt.loadNpmTasks('grunt-contrib-clean');
     grunt.loadNpmTasks('grunt-contrib-connect');
     grunt.loadNpmTasks('grunt-contrib-compress');
     grunt.loadNpmTasks('grunt-contrib-concat');
     grunt.loadNpmTasks('grunt-contrib-uglify');
-    grunt.loadNpmTasks('grunt-html2js');
     grunt.loadNpmTasks('grunt-contrib-watch');
     grunt.loadNpmTasks('grunt-bower-task');
+    grunt.loadNpmTasks('grunt-html2js');
 
-    grunt.registerTask('dev', ['bower', 'connect:server', 'watch:dev']);
-    grunt.registerTask('test', ['bower', 'jshint' ]);
+    grunt.registerTask('build', ['bower', '']);
+
+    grunt.registerTask('dev', ['build', 'connect:server', 'watch:dev']);
+    grunt.registerTask('test', ['build']);
+
     grunt.registerTask('minified', ['bower', 'connect:server', 'watch:min']);
-    grunt.registerTask('package', ['bower', 'jshint', 'html2js:dist', 'concat:dist', 'uglify:dist',
+    grunt.registerTask('package', ['bower', 'html2js:dist', 'concat:dist', 'uglify:dist',
         'clean:temp', 'compress:dist']);
 };
